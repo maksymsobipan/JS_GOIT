@@ -13,7 +13,6 @@ function Cashier(name, productDatabase, customerMoney = 0) {
   this.customerMoney = customerMoney;
   this.name = name;
   this.productDatabase = productDatabase;
-  // this.TotalPrice = 0;
   this.getCustomerMoney = function (value) {
     return this.customerMoney = value;
   }
@@ -33,9 +32,7 @@ const totalPrice = this.countTotalPrice(order);
 
 this.countChange = function () {
   if (this.customerMoney >= totalPrice) {
-
     return this.customerMoney - totalPrice;
-    // this.onSuccess
   } else {
     return null;
   }
@@ -43,37 +40,22 @@ this.countChange = function () {
 
 const change = this.countChange();
 
-
-  this.onSuccess = function (change) {
-    return console.log(`Спасибо за покупку, ваша сдача ${change}`);
-  };
-
-
-
-
+this.onSuccess = function (change) {
   if(change !== null) {
-     // При успешном обслуживании вызываем метод onSuccess
-    this.onSuccess(change); // Спасибо за покупку, ваша сдача 190
-  } else {
-    // При неудачном обслуживании вызываем метод onError
-    this.onError = function () {
-      return console.log(`Очень жаль, вам не хватает денег на покупки`);
-    }
-  };
-
-   // При успешном обслуживании вызываем метод onSuccess
+    return console.log(`Спасибо за покупку, ваша сдача ${change}`);
+  }
 };
-// else {
-//   // При неудачном обслуживании вызываем метод onError
-//   mango.onError(); // Очень жаль, вам не хватает денег на покупки
-// }
-// console.log(change);
 
+this.onError = function () {
+  if(change === null) {
+    return console.log(`Очень жаль, вам не хватает денег на покупки`);
+  }
+};
 
-
-
-
-  // ===========================================================
+  this.reset = function () {
+    return this.customerMoney = 0;
+  };
+};
 
 /* Заказ пользователя хранится в виде объекта следующего формата. "имя-продукта":"количество-единиц" */
 const order = {
@@ -85,14 +67,12 @@ const order = {
 
 /* Пример использования */
 
-
 const mango = new Cashier('Mango', products);
 
 // Проверяем исходные значения полей
 console.log(mango.name); // Mango
 console.log(mango.productDatabase); // ссылка на базу данных продуктов (объект products)
 console.log(mango.customerMoney); // 0
-
 
 // Вызываем метод countTotalPrice для подсчета общей суммы
 // передавая order - список покупок пользователя
@@ -102,7 +82,7 @@ const totalPrice = mango.countTotalPrice(order);
 console.log(totalPrice); // 110
 //
 // // Вызываем getCustomerMoney для запроса денег покупателя
-mango.getCustomerMoney(100);
+mango.getCustomerMoney(300);
 //
 // // Проверяем что в поле с деньгами пользователя
 console.log(mango.customerMoney); // 300
@@ -113,18 +93,18 @@ const change = mango.countChange();
 // // Проверяем что нам вернул countChange
 console.log(change !== null);
 console.log(`change ${change}`); // 190
-// mango.onSuccess(change);
+mango.onSuccess(change);
 // // Проверяем результат подсчета денег
-// if(change !== null) {
-//    // При успешном обслуживании вызываем метод onSuccess
-//   mango.onSuccess(change); // Спасибо за покупку, ваша сдача 190
-// } else {
-//   // При неудачном обслуживании вызываем метод onError
-//   mango.onError(); // Очень жаль, вам не хватает денег на покупки
-// }
+if(change !== null) {
+   // При успешном обслуживании вызываем метод onSuccess
+  mango.onSuccess(change); // Спасибо за покупку, ваша сдача 190
+} else {
+  // При неудачном обслуживании вызываем метод onError
+  mango.onError(); // Очень жаль, вам не хватает денег на покупки
+}
 //
 // // Вызываем reset при любом исходе обслуживания
-// mango.reset();
+mango.reset();
 //
 // // Проверяем значения после reset
-// console.log(mango.customerMoney); // 0
+console.log(mango.customerMoney); // 0
